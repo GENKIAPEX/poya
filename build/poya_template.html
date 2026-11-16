@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>寶雅新品資訊</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Inter:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: a calm counter reference — quick to scan on a phone at the till
+   IDEA: a stack of shelf labels, each one carrying a scannable barcode
+   PICTURE: a large, real EAN-13 barcode on every label
+   COLOUR and TYPE: white ground, warm ink, ultramarine accent; Noto Sans TC + Inter for digits
+   LAYOUT: a grid of label cards; tap a barcode to show it full screen */
+:root{color-scheme:light dark;
+  --bg:light-dark(#f4f3f0,#0d0e18);--card:light-dark(#ffffff,#171926);--ink:light-dark(#14110f,#eceaf3);
+  --mute:light-dark(#6b6660,#9a98aa);--line:light-dark(#e4e1db,#2a2c3c);--acc:light-dark(#1d2bd8,#8d97ff);
+  --chip:light-dark(#eef0ff,#22264a)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans TC",system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(24px,4vw,48px) max(5vw,16px) 0;max-width:1240px;margin:0 auto}
+h1{font-size:clamp(32px,6vw,48px);line-height:1.05;margin:0 0 10px;font-weight:900;letter-spacing:.02em;text-wrap:balance}
+.meta{color:var(--mute);margin:0;font-size:15px}
+.meta b{color:var(--ink);font-weight:500}
+.pick{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:18px}
+.pick label{font-weight:700;font-size:16px}
+.selw{position:relative;max-width:100%}
+@media(max-width:600px){.selw,#sel{width:100%}}
+.selw::after{content:"";position:absolute;right:16px;top:50%;width:8px;height:8px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+#sel{appearance:none;-webkit-appearance:none;min-height:48px;min-width:200px;max-width:100%;padding:0 44px 0 16px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:600 16px Inter,"Noto Sans TC",sans-serif;cursor:pointer;text-overflow:ellipsis}
+#sel:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-color:var(--acc)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:16px;padding:20px max(5vw,16px) 56px;max-width:1240px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;grid-template-columns:minmax(0,1fr);gap:12px 16px;align-content:start}
+.card.has{grid-template-columns:112px minmax(0,1fr)}
+.ph{width:112px;height:112px;border-radius:12px;background:#fff;border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;padding:0;cursor:zoom-in}
+.ph img{width:100%;height:100%;object-fit:contain}
+@media(max-width:420px){.card.has{grid-template-columns:92px minmax(0,1fr)}.ph{width:92px;height:92px}}
+.big img{max-width:min(88vw,520px);max-height:62vh;object-fit:contain}
+.no{font:600 13px Inter,sans-serif;color:var(--mute)}
+.nm{font-size:17px;font-weight:700;line-height:1.35;margin:2px 0 8px;white-space:pre-line}
+.warn{grid-column:1/-1;margin:0;font-size:13px;color:light-dark(#b42318,#ff8a80)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--chip);color:var(--acc);border-radius:999px;padding:2px 10px;font-size:13px;font-weight:500;white-space:nowrap}
+.code{grid-column:1/-1;border-top:1px dashed var(--line);padding-top:12px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center}
+.bc{grid-column:1/-1;background:#fff;border-radius:10px;padding:10px 12px 6px;border:0;cursor:zoom-in;display:block;width:100%}
+.bc svg{display:block;width:100%;height:64px}
+.bc:focus-visible,.btn:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.kv{font-size:13px;color:var(--mute);line-height:1.4}
+.kv b{display:block;font:600 17px Inter,sans-serif;color:var(--ink);letter-spacing:.04em;white-space:nowrap}
+.btns{display:flex;gap:8px}
+.btn{min-height:44px;padding:0 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:500 14px "Noto Sans TC",sans-serif;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--acc);color:var(--acc)}
+.btn.ok{background:var(--acc);border-color:var(--acc);color:#fff}
+.empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:48px 0}
+.big{position:fixed;inset:0;z-index:20;background:#fff;color:#111;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px}
+.big.on{display:flex}
+.big svg{width:min(92vw,620px);height:auto}
+.big .t{font-size:18px;font-weight:700;text-align:center;max-width:620px}
+.big .d{font:600 26px Inter,sans-serif;letter-spacing:.12em}
+.big .btn{background:#111;color:#fff;border-color:#111}
+.foot{max-width:1240px;margin:0 auto;padding:0 max(5vw,16px) 40px;color:var(--mute);font-size:13px}
+@media(prefers-reduced-motion:no-preference){.card{animation:in .35s ease both}@keyframes in{from{opacity:0;transform:translateY(6px)}}}
+.locked .pick,.locked .grid,.locked .foot,.locked header{display:none}
+.lock{min-height:100vh;display:grid;place-items:center;padding:24px}
+.lock[hidden]{display:none}
+.lockF{width:min(100%,340px);display:grid;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 24px}
+.lockF h2{margin:0;font-size:24px;font-weight:900}
+.lockF p{margin:0;color:var(--mute)}
+.lockF input[type=password]{min-height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:16px Inter,sans-serif;padding:0 14px}
+.lockF input[type=password]:focus{outline:none;border-color:var(--acc)}
+.keep{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--mute)}
+.keep input{width:18px;height:18px}
+.lockF .err{color:light-dark(#b42318,#ff8a80);min-height:1.4em;font-size:14px}
+</style>
+</head>
+<body>
+<div class="lock" id="lock" hidden>
+  <form id="lockF" class="lockF" autocomplete="off">
+    <h2>寶雅新品資訊</h2>
+    <p>請輸入密碼</p>
+    <input id="pw" type="password" inputmode="text" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="密碼">
+    <label class="keep"><input type="checkbox" id="keep" checked> 這台手機記住密碼</label>
+    <button class="btn ok" type="submit">進入</button>
+    <p class="err" id="pwMsg" role="alert"></p>
+  </form>
+</div>
+<header class="band">
+  <h1>寶雅新品資訊</h1>
+  <p class="meta">中店課 · 寶雅系統新品報價單</p>
+  <div class="pick">
+    <label for="sel">報價單日期</label>
+    <div class="selw"><select id="sel"></select></div>
+    <span class="meta">共 <b id="tot"></b> 項</span>
+  </div>
+</header>
+<main class="grid" id="grid"></main>
+<p class="foot">點條碼可放大，直接拿去掃描；點商品圖也可以放大。資料以寶雅新品報價單為準。</p>
+<div class="big" id="big" role="dialog" aria-modal="true" aria-label="放大條碼">
+  <div class="t" id="bigT"></div><div id="bigB"></div><div class="d" id="bigD"></div>
+  <button class="btn" id="bigX" type="button">關閉</button>
+</div>
+<script>
+{
+const RAW = /*__DATA__*/null;
+const L=['0001101','0011001','0010011','0111101','0100011','0110001','0101111','0111011','0110111','0001011'];
+const R=L.map(s=>[...s].map(c=>c==='1'?'0':'1').join(''));
+const G=R.map(s=>[...s].reverse().join(''));
+const P=['LLLLLL','LLGLGG','LLGGLG','LLGGGL','LGLLGG','LGGLLG','LGGGLL','LGLGLG','LGLGGL','LGGLGL'];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function ean13(code){
+  if(!/^\d{13}$/.test(code)) return '';
+  const d=[...code].map(Number), p=P[d[0]];
+  let bits='101';
+  for(let i=1;i<7;i++) bits+=(p[i-1]==='L'?L:G)[d[i]];
+  bits+='01010';
+  for(let i=7;i<13;i++) bits+=R[d[i]];
+  bits+='101';
+  const guard=new Set([0,1,2,45,46,47,48,49,92,93,94]);
+  let rects='',x=0;
+  while(x<95){
+    if(bits[x]==='1'){let w=1;while(bits[x+w]==='1'&&!(guard.has(x)!==guard.has(x+w)))w++;
+      rects+=`<rect x="${x+9}" y="0" width="${w}" height="${guard.has(x)?50:44}"/>`;x+=w;}
+    else x++;
+  }
+  return `<svg viewBox="0 0 113 50" preserveAspectRatio="none" role="img" aria-label="條碼 ${code}"><rect width="113" height="50" fill="#fff"/><g fill="#111">${rects}</g></svg>`;
+}
+const grid=document.getElementById('grid');
+function start(DATA){
+const sheets=(DATA&&DATA.sheets)||[];
+const sel=document.getElementById('sel');
+const hid=i=>'d-'+sheets[i].date.replace(/\D/g,'-')+'-'+i;
+sel.innerHTML=sheets.map((s,i)=>`<option value="${i}">${esc(s.date)}　${esc(s.brands)}（${s.items.length} 項）</option>`).join('');
+let items=[];
+function card(it,i){
+  const chips=[it.vol&&`容量 ${esc(it.vol)}`, (it.years?`保存期限 ${it.years} 年`:it.days?`保存 ${it.days} 天`:''), it.period&&`檔期 ${esc(it.period)}`].filter(Boolean).map(c=>`<span class="chip">${c}</span>`).join('');
+  return `<article class="card${it.img?' has':''}" style="animation-delay:${Math.min(i,12)*30}ms">
+    ${it.img?`<button class="ph" type="button" data-p="${i}" aria-label="放大 ${esc(it.name)} 的圖片"><img src="${it.img}" alt="" loading="lazy"></button>`:''}
+    <div><div class="no">#${esc(it.no)}</div><div class="nm">${esc(it.name)}</div><div class="chips">${chips}</div></div>
+    <div class="code">
+      <button class="bc" type="button" data-i="${i}" aria-label="放大 ${esc(it.name)} 的條碼">${ean13(it.ean)}</button>${it.ok===false?'<p class="warn">這組條碼的檢查碼不對，可能是報價單打錯，請以商品上的條碼為準。</p>':''}
+      <div class="kv">國際條碼<b>${esc(it.ean)}</b></div>
+      <div class="btns"><button class="btn" type="button" data-copy="${esc(it.ean)}">複製國條</button></div>
+      <div class="kv">廠商品號<b>${esc(it.code)}</b></div>
+      <div class="btns"><button class="btn" type="button" data-copy="${esc(it.code)}">複製品號</button></div>
+    </div></article>`;
+}
+function pick(i){
+  const s=sheets[i]; items=s?s.items:[]; sel.value=String(i);
+  document.getElementById('tot').textContent=items.length;
+  render();
+}
+function fromHash(){const i=sheets.findIndex((s,k)=>'#'+hid(k)===location.hash);return i<0?0:i;}
+sel.addEventListener('change',()=>{const i=+sel.value;pick(i);try{history.replaceState(null,'','#'+hid(i));}catch(e){}});
+window.addEventListener('hashchange',()=>pick(fromHash()));
+function render(){
+  grid.innerHTML=items.length?items.map((it,i)=>card(it,i)).join(''):'<p class="empty">目前沒有新品資料</p>';
+}
+const big=document.getElementById('big');
+function close(){big.classList.remove('on');}
+grid.addEventListener('click',async e=>{
+  const b=e.target.closest('.bc');
+  if(b){const it=items[+b.dataset.i];
+    document.getElementById('bigT').textContent=it.name;
+    document.getElementById('bigB').innerHTML=ean13(it.ean);
+    document.getElementById('bigD').textContent=it.ean;
+    big.classList.add('on');document.getElementById('bigX').focus();return;}
+  const ph=e.target.closest('.ph');
+  if(ph){const it=items[+ph.dataset.p];
+    document.getElementById('bigT').textContent=it.name;
+    document.getElementById('bigB').innerHTML=`<img src="${it.img}" alt="${esc(it.name)}">`;
+    document.getElementById('bigD').textContent='';
+    big.classList.add('on');document.getElementById('bigX').focus();return;}
+  const c=e.target.closest('[data-copy]');
+  if(c){const t=c.textContent;
+    try{await navigator.clipboard.writeText(c.dataset.copy);c.textContent='已複製';c.classList.add('ok');}
+    catch(err){c.textContent='請長按數字複製';}
+    setTimeout(()=>{c.textContent=t;c.classList.remove('ok');},1400);}
+});
+document.getElementById('bigX').addEventListener('click',close);
+big.addEventListener('click',e=>{if(e.target===big)close();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+pick(fromHash());
+}
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function unlock(pw){
+  const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(RAW.s),iterations:RAW.n,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+  const buf=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(RAW.i)},key,b64(RAW.c));
+  return JSON.parse(new TextDecoder().decode(buf));
+}
+const lock=document.getElementById('lock'), pwI=document.getElementById('pw'), msg=document.getElementById('pwMsg'), keep=document.getElementById('keep');
+async function tryOpen(pw,silent){
+  try{
+    const d=await unlock(pw);
+    document.body.classList.remove('locked'); lock.hidden=true;
+    try{ if(keep.checked) localStorage.setItem('poya-pw',pw); }catch(e){}
+    start(d); return true;
+  }catch(e){
+    if(!silent){ msg.textContent='密碼不對，請再試一次。'; pwI.select(); }
+    return false;
+  }
+}
+if(RAW&&RAW.c){
+  document.body.classList.add('locked'); lock.hidden=false;
+  document.getElementById('lockF').addEventListener('submit',e=>{e.preventDefault();msg.textContent='';if(pwI.value)tryOpen(pwI.value,false);});
+  let saved=null; try{saved=localStorage.getItem('poya-pw');}catch(e){}
+  if(saved) tryOpen(saved,true).then(ok=>{ if(!ok){ try{localStorage.removeItem('poya-pw');}catch(e){} pwI.focus(); } });
+  else pwI.focus();
+}else{ start(RAW); }
+}
+</script>
+</body>
+</html>
