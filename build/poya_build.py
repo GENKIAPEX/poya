@@ -1,7 +1,7 @@
 """Build the 寶雅新品資訊 page from many 報價單 files.
 Usage: python3 poya_build.py <manifest.json> <template.html> <out.html>
 manifest: [{"file": path, "date": "YYYY.MM.DD"}, ...]   (one dropdown entry each)
-Only non-price fields are exported. Set env POYA_PASSWORD to encrypt the data (required for the public site)."""
+Exports retail price (牌價) but never cost, wholesale price or margin. Set env POYA_PASSWORD to encrypt the data (required for the public site)."""
 import sys, json, re
 sys.path.insert(0, __import__('os').path.dirname(__import__('os').path.abspath(__file__)))
 from poya_extract import extract, images

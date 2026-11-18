@@ -39,6 +39,8 @@ h1{font-size:clamp(32px,6vw,48px);line-height:1.05;margin:0 0 10px;font-weight:9
 .big img{max-width:min(88vw,520px);max-height:62vh;object-fit:contain}
 .no{font:600 13px Inter,sans-serif;color:var(--mute)}
 .nm{font-size:17px;font-weight:700;line-height:1.35;margin:2px 0 8px;white-space:pre-line}
+.pr{font-size:14px;color:var(--mute);margin:-4px 0 8px;white-space:nowrap}
+.pr b{font:600 18px Inter,sans-serif;color:var(--ink)}
 .warn{grid-column:1/-1;margin:0;font-size:13px;color:light-dark(#b42318,#ff8a80)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{background:var(--chip);color:var(--acc);border-radius:999px;padding:2px 10px;font-size:13px;font-weight:500;white-space:nowrap}
@@ -136,7 +138,7 @@ function card(it,i){
   const chips=[it.vol&&`容量 ${esc(it.vol)}`, (it.years?`保存期限 ${it.years} 年`:it.days?`保存 ${it.days} 天`:''), it.period&&`檔期 ${esc(it.period)}`].filter(Boolean).map(c=>`<span class="chip">${c}</span>`).join('');
   return `<article class="card${it.img?' has':''}" style="animation-delay:${Math.min(i,12)*30}ms">
     ${it.img?`<button class="ph" type="button" data-p="${i}" aria-label="放大 ${esc(it.name)} 的圖片"><img src="${it.img}" alt="" loading="lazy"></button>`:''}
-    <div><div class="no">#${esc(it.no)}</div><div class="nm">${esc(it.name)}</div><div class="chips">${chips}</div></div>
+    <div><div class="no">#${esc(it.no)}</div><div class="nm">${esc(it.name)}</div>${it.price!=null?`<div class="pr">牌價 <b>$${Number(it.price).toLocaleString('en-US')}</b></div>`:''}<div class="chips">${chips}</div></div>
     <div class="code">
       <button class="bc" type="button" data-i="${i}" aria-label="放大 ${esc(it.name)} 的條碼">${ean13(it.ean)}</button>${it.ok===false?'<p class="warn">這組條碼的檢查碼不對，可能是報價單打錯，請以商品上的條碼為準。</p>':''}
       <div class="kv">國際條碼<b>${esc(it.ean)}</b></div>

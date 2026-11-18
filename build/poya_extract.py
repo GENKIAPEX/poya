@@ -1,5 +1,5 @@
 """Read any 寶雅新品報價單 (new 實體專用 xlsx or old 國際櫃/東京櫃 format) and return
-non-price product info. Columns are located by header text, so both layouts work."""
+product info for the BA site: retail price (市價, shown as 牌價) only — never cost/wholesale/margin. Columns are located by header text, so both layouts work."""
 import re, warnings
 import openpyxl
 warnings.filterwarnings('ignore')
@@ -23,7 +23,8 @@ def extract(path):
             hdr_row = r
             for col, v in row.items():
                 for key, pat in [('ean', '國際條碼'), ('code', '廠商商品編碼'), ('name', '品名'),
-                                 ('days', '保存天數'), ('period', '新品檔期'), ('unit', '單位')]:
+                                 ('days', '保存天數'), ('period', '新品檔期'), ('unit', '單位'),
+                                 ('price', '市價')]:
                     if pat in v and key not in cols:
                         cols[key] = col
             break
@@ -52,7 +53,9 @@ def extract(path):
         vols = re.findall(r'(\d+(?:\.\d+)?\s*(?:ml|ML|g|入|片))(?![a-zA-Z])', name.splitlines()[-1] if name else '')
         vol = vols[-1].replace(' ', '').replace('ML', 'ml') if vols else ''
         p = ws.cell(r, cols['period']).value if 'period' in cols else None
-        items.append(dict(ean=ean, ok=ean_ok(ean), code=code, name=name,
+        pv = ws.cell(r, cols['price']).value if 'price' in cols else None
+        price = int(pv) if isinstance(pv, (int, float)) and float(pv).is_integer() else (pv if isinstance(pv, (int, float)) else None)
+        items.append(dict(ean=ean, ok=ean_ok(ean), code=code, name=name, price=price,
                           vol=vol,
                           years=(round(days / 365) if abs(days - 365 * round(days / 365)) <= 30 else None)
                                 if isinstance(days, (int, float)) and days else None,
